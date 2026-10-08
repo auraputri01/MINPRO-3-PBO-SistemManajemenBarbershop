@@ -119,7 +119,6 @@ public class Main {
         System.out.println();
         System.out.println("TAMBAH PELANGGAN (ketik 'batal' untuk membatalkan)");
 
-        String id = bacaIdBaru("ID Pelanggan (3-10 huruf/angka): ", controller::idPelangganSudahAda);
         String nama = bacaNama("Nama: ");
         String noHp = bacaNoHp("No HP: ");
 
@@ -131,9 +130,10 @@ public class Main {
         try {
             // Memakai overloading di Controller: dengan/tanpa parameter "member"
             Pelanggan pelanggan = (jenis == 1)
-                    ? controller.tambahPelanggan(id, nama, noHp)
-                    : controller.tambahPelanggan(id, nama, noHp, true);
+                    ? controller.tambahPelanggan(nama, noHp)
+                    : controller.tambahPelanggan(nama, noHp, true);
             System.out.println("Pelanggan berhasil ditambahkan sebagai " + pelanggan.getPeran() + ".");
+            System.out.println("ID Pelanggan : " + pelanggan.getIdPelanggan());
         } catch (IllegalArgumentException e) {
             System.out.println("Gagal: " + e.getMessage());
         }
@@ -157,10 +157,9 @@ public class Main {
     private void ubahPelanggan() {
         System.out.println();
         System.out.println("UBAH PELANGGAN (ketik 'batal' untuk membatalkan)");
-        Pelanggan pelanggan = controller.cariPelanggan(bacaInput("Masukkan ID Pelanggan: "));
+        Pelanggan pelanggan = pilihPelanggan();
 
         if (pelanggan == null) {
-            System.out.println("Pelanggan tidak ditemukan.");
             return;
         }
 
@@ -178,10 +177,9 @@ public class Main {
     private void hapusPelanggan() {
         System.out.println();
         System.out.println("HAPUS PELANGGAN (ketik 'batal' untuk membatalkan)");
-        Pelanggan pelanggan = controller.cariPelanggan(bacaInput("Masukkan ID Pelanggan: "));
+        Pelanggan pelanggan = pilihPelanggan();
 
         if (pelanggan == null) {
-            System.out.println("Pelanggan tidak ditemukan.");
             return;
         }
 
@@ -243,7 +241,6 @@ public class Main {
         System.out.println();
         System.out.println("TAMBAH BARBER (ketik 'batal' untuk membatalkan)");
 
-        String id = bacaIdBaru("ID Barber (3-10 huruf/angka): ", controller::idBarberSudahAda);
         String nama = bacaNama("Nama Barber: ");
         int pengalaman = bacaPengalaman("Pengalaman Kerja (0-50 tahun): ");
 
@@ -255,9 +252,10 @@ public class Main {
         try {
             // Memakai overloading di Controller: dengan/tanpa parameter "senior"
             Barber barber = (jenis == 1)
-                    ? controller.tambahBarber(id, nama, pengalaman)
-                    : controller.tambahBarber(id, nama, pengalaman, true);
+                    ? controller.tambahBarber(nama, pengalaman)
+                    : controller.tambahBarber(nama, pengalaman, true);
             System.out.println("Barber berhasil ditambahkan sebagai " + barber.getPeran() + ".");
+            System.out.println("ID Barber    : " + barber.getIdBarber());
         } catch (IllegalArgumentException e) {
             System.out.println("Gagal: " + e.getMessage());
         }
@@ -282,10 +280,9 @@ public class Main {
     private void ubahBarber() {
         System.out.println();
         System.out.println("UBAH BARBER (ketik 'batal' untuk membatalkan)");
-        Barber barber = controller.cariBarber(bacaInput("Masukkan ID Barber: "));
+        Barber barber = pilihBarber();
 
         if (barber == null) {
-            System.out.println("Barber tidak ditemukan.");
             return;
         }
 
@@ -303,10 +300,9 @@ public class Main {
     private void hapusBarber() {
         System.out.println();
         System.out.println("HAPUS BARBER (ketik 'batal' untuk membatalkan)");
-        Barber barber = controller.cariBarber(bacaInput("Masukkan ID Barber: "));
+        Barber barber = pilihBarber();
 
         if (barber == null) {
-            System.out.println("Barber tidak ditemukan.");
             return;
         }
 
@@ -326,10 +322,9 @@ public class Main {
     private void ubahStatusBarber() {
         System.out.println();
         System.out.println("UBAH STATUS KEHADIRAN (ketik 'batal' untuk membatalkan)");
-        Barber barber = controller.cariBarber(bacaInput("Masukkan ID Barber: "));
+        Barber barber = pilihBarber();
 
         if (barber == null) {
-            System.out.println("Barber tidak ditemukan.");
             return;
         }
 
@@ -416,23 +411,13 @@ public class Main {
             return;
         }
 
-        Pelanggan pelanggan = controller.cariPelanggan(bacaInput("Masukkan ID Pelanggan: "));
+        Pelanggan pelanggan = pilihPelanggan();
         if (pelanggan == null) {
-            System.out.println("Pelanggan tidak ditemukan.");
             return;
         }
 
-        System.out.println();
-        System.out.println("Daftar Barber:");
-        for (Barber b : controller.getDaftarBarber()) {
-            System.out.println(b.getIdBarber() + " | " + b.getNamaBarber() + " | " + b.getPeran()
-                    + " | " + b.getJumlahPelangganAktif() + "/" + b.getKapasitas()
-                    + " | " + b.getStatusBarber());
-        }
-
-        Barber barber = controller.cariBarber(bacaInput("Pilih ID Barber: "));
+        Barber barber = pilihBarber();
         if (barber == null) {
-            System.out.println("Barber tidak ditemukan.");
             return;
         }
 
@@ -482,10 +467,9 @@ public class Main {
 
     private void mulaiPelayanan() {
         System.out.println();
-        Pelayanan pelayanan = controller.cariPelayanan(bacaInput("Masukkan ID Pelayanan: "));
+        Pelayanan pelayanan = pilihPelayanan(x -> Pelayanan.MENUNGGU.equals(x.getStatusPelayanan()), "yang menunggu");
 
         if (pelayanan == null) {
-            System.out.println("Pelayanan tidak ditemukan.");
             return;
         }
 
@@ -499,10 +483,9 @@ public class Main {
 
     private void selesaikanPelayanan() {
         System.out.println();
-        Pelayanan pelayanan = controller.cariPelayanan(bacaInput("Masukkan ID Pelayanan: "));
+        Pelayanan pelayanan = pilihPelayanan(x -> Pelayanan.DIPROSES.equals(x.getStatusPelayanan()), "yang sedang diproses");
 
         if (pelayanan == null) {
-            System.out.println("Pelayanan tidak ditemukan.");
             return;
         }
 
@@ -517,10 +500,9 @@ public class Main {
 
     private void pembayaran() {
         System.out.println();
-        Pelayanan pelayanan = controller.cariPelayanan(bacaInput("Masukkan ID Pelayanan: "));
+        Pelayanan pelayanan = pilihPelayanan(x -> Pelayanan.SELESAI.equals(x.getStatusPelayanan()) && !x.isLunas(), "yang belum dibayar");
 
         if (pelayanan == null) {
-            System.out.println("Pelayanan tidak ditemukan.");
             return;
         }
 
@@ -550,10 +532,9 @@ public class Main {
 
     private void batalkanPelayanan() {
         System.out.println();
-        Pelayanan pelayanan = controller.cariPelayanan(bacaInput("Masukkan ID Pelayanan: "));
+        Pelayanan pelayanan = pilihPelayanan(x -> x.isAktif(), "yang masih aktif");
 
         if (pelayanan == null) {
-            System.out.println("Pelayanan tidak ditemukan.");
             return;
         }
 
@@ -567,10 +548,9 @@ public class Main {
 
     private void cekStatusPelanggan() {
         System.out.println();
-        Pelanggan pelanggan = controller.cariPelanggan(bacaInput("Masukkan ID Pelanggan: "));
+        Pelanggan pelanggan = pilihPelanggan();
 
         if (pelanggan == null) {
-            System.out.println("Pelanggan tidak ditemukan.");
             return;
         }
 
@@ -661,6 +641,65 @@ public class Main {
         } catch (InputBatalException e) {
             System.out.println("Proses dibatalkan.");
         }
+    }
+
+    // PILIH DARI DAFTAR (tanpa mengetik ID)
+    /** Menampilkan daftar bernomor lalu pengguna memilih nomor. Mengembalikan null jika data kosong. */
+    private Pelanggan pilihPelanggan() {
+        if (controller.getDaftarPelanggan().isEmpty()) {
+            System.out.println("Data pelanggan masih kosong.");
+            return null;
+        }
+        System.out.println("Daftar Pelanggan:");
+        int no = 1;
+        for (Pelanggan p : controller.getDaftarPelanggan()) {
+            System.out.println(no++ + ". " + p.getIdPelanggan() + " | " + p.getNama() + " | " + p.getPeran());
+        }
+        int pilihan = bacaPilihan("Pilih nomor pelanggan: ", 1, controller.getDaftarPelanggan().size());
+        return controller.getDaftarPelanggan().get(pilihan - 1);
+    }
+
+    private Barber pilihBarber() {
+        if (controller.getDaftarBarber().isEmpty()) {
+            System.out.println("Data barber masih kosong.");
+            return null;
+        }
+        System.out.println("Daftar Barber:");
+        int no = 1;
+        for (Barber b : controller.getDaftarBarber()) {
+            System.out.println(no++ + ". " + b.getIdBarber() + " | " + b.getNamaBarber() + " | " + b.getPeran()
+                    + " | " + b.getJumlahPelangganAktif() + "/" + b.getKapasitas()
+                    + " | " + b.getStatusBarber());
+        }
+        int pilihan = bacaPilihan("Pilih nomor barber: ", 1, controller.getDaftarBarber().size());
+        return controller.getDaftarBarber().get(pilihan - 1);
+    }
+
+    private Pelayanan pilihPelayanan(Predicate<Pelayanan> filter, String keterangan) {
+        java.util.ArrayList<Pelayanan> tersaring = new java.util.ArrayList<>();
+        for (Pelayanan p : controller.getDaftarPelayanan()) {
+            if (filter.test(p)) {
+                tersaring.add(p);
+            }
+        }
+        if (tersaring.isEmpty()) {
+            System.out.println("Tidak ada pelayanan " + keterangan + ".");
+            return null;
+        }
+        System.out.println("Daftar Pelayanan " + keterangan + ":");
+        int no = 1;
+        for (Pelayanan p : tersaring) {
+            Pelanggan pelanggan = controller.cariPelanggan(p.getIdPelanggan());
+            Barber barber = controller.cariBarber(p.getIdBarber());
+            Layanan layanan = controller.cariLayanan(p.getIdLayanan());
+            System.out.println(no++ + ". " + p.getIdPelayanan()
+                    + " | " + (pelanggan != null ? pelanggan.getNama() : "-")
+                    + " | " + (barber != null ? barber.getNamaBarber() : "-")
+                    + " | " + (layanan != null ? layanan.getNamaLayanan() : "-")
+                    + " | " + p.getStatusPelayanan());
+        }
+        int pilihan = bacaPilihan("Pilih nomor pelayanan: ", 1, tersaring.size());
+        return tersaring.get(pilihan - 1);
     }
 
     private String bacaInput(String label) {
