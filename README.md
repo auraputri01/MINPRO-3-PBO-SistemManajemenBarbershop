@@ -1,4 +1,5 @@
 # **SISTEM MANAJEMEN BARBERSHOP**
+# **Mini Project 2 Praktikum Pemrograman Berorientasi Objek (PBO)**
 
 ### **Nama: Aura Putri Anandita Syarif NIM: 2509116094 Program Studi: Sistem Informasi (C)**
 
